@@ -18,4 +18,4 @@ O que é necessário instalar para rodar o projeto:
 
 1. Clone este repositório:
    ```bash
-   git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+   git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/vinnisntos/PIM-CODE-ASP.NET-2026.git)
