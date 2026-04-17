@@ -1,0 +1,40 @@
+﻿@page
+@model  PIM2026.Pages.IndexModel
+@{
+    ViewData["Title"] = "Bem-vindo";
+}
+
+<div class="card-wrap">
+    <div class="text-center py-4">
+        <div class="logo d-inline-block" style="font-size:28px">Studio <em>Beauty</em></div>
+        <p class="mt-1" style="font-size:13px;color:var(--muted)">Design de Sobrancelhas</p>
+    </div>
+
+    <div class="tabs" id="authTabs">
+        <div class="tab active" onclick="switchTab('login')">Entrar</div>
+        <div class="tab" onclick="switchTab('cadastro')">Cadastrar</div>
+    </div>
+
+    <div id="formLogin">
+        <form method="post">
+            <div class="field">
+                <label>E-mail</label>
+                <input type="email" name="Email" placeholder="seu@email.com" required />
+            </div>
+            <div class="field">
+                <label>Senha</label>
+                <input type="password" name="Senha" placeholder="••••••••" required />
+            </div>
+            <button type="submit" class="btn-sb btn-sb-primary">Entrar na conta →</button>
+        </form>
+    </div>
+
+    <div id="formCadastro" style="display:none">
+        <form method="post" asp-page-handler="Register">
+            <div class="field"><label>Nome</label><input type="text" name="Nome" required /></div>
+            <div class="field"><label>E-mail</label><input type="email" name="Email" required /></div>
+            <div class="field"><label>Senha</label><input type="password" name="Senha" required /></div>
+            <button type="submit" class="btn-sb btn-sb-primary">Criar conta grátis →</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+﻿@page
+@model PIM2026.Pages.SucessoModel
+@{
+    ViewData["Title"] = "Agendamento Confirmado";
+}
+
+<div class="card-wrap">
+    <div class="text-center py-4">
+        <div class="success-anim" style="font-size: 50px; margin-bottom: 20px;">✨</div>
+        <p class="success-title" style="font-family: 'Playfair Display', serif; font-size: 28px;">Agendado com sucesso!</p>
+        <p class="success-msg" style="color: var(--muted); margin-bottom: 30px;">
+            Seu horário no Studio Beauty está confirmado.
+        </p>
+
+        <div class="confirm-box" style="background: var(--rose-light); border: 1.5px dashed var(--rose-mid); border-radius: var(--radius-lg); padding: 25px; margin-bottom: 30px;">
+            <div class="confirm-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted);">
+                Código de confirmação
+            </div>
+            <div class="confirm-code" style="font-size: 32px; font-weight: 600; color: var(--rose-dark); letter-spacing: 4px; font-family: 'Playfair Display', serif;">
+                @Model.CodigoConfirmacao
+            </div>
+        </div>
+
+        <button class="btn-sb btn-sb-primary" onclick="window.location.href='/Agendamento'">+ Novo agendamento</button>
+        <button class="btn-sb btn-sb-outline" onclick="window.location.href='/Index'">Voltar ao início</button>
+    </div>
+</div>

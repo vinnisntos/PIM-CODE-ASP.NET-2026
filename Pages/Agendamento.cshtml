@@ -1,0 +1,118 @@
+﻿@page
+@model PIM2026.Pages.AgendamentoModel
+@{
+    ViewData["Title"] = "Agendar Horário";
+}
+
+<div class="card-wrap">
+
+    <div class="screen active" id="tela2">
+        <div class="d-flex justify-content-end mb-3">
+            <button class="switch-btn" onclick="trocarConta()">
+                <div class="sw-av" id="av2">?</div>
+                <span id="nm2">Minha conta</span>&nbsp;· Trocar conta
+            </button>
+        </div>
+        <p class="screen-title">Agendar</p>
+        <p class="screen-sub">Escolha profissional, serviço e horário</p>
+
+        <span class="s-label">Escolha sua profissional</span>
+        <div class="prof-grid">
+            <div class="prof-card selected" onclick="selProf(this)">
+                <div class="prof-avatar">AM</div>
+                <div class="prof-name">Ana Melo</div>
+                <div class="prof-spec">Design &amp; Micropigmentação</div>
+            </div>
+            <div class="prof-card" onclick="selProf(this)">
+                <div class="prof-avatar">CB</div>
+                <div class="prof-name">Carla Bueno</div>
+                <div class="prof-spec">Henna &amp; Laminação</div>
+            </div>
+        </div>
+
+        <span class="s-label">Escolha os serviços</span>
+        <div class="serv-list">
+            <div class="serv-item" onclick="toggleServ(this,'Design de sobrancelha','40 min','80')">
+                <div class="serv-check"></div>
+                <div><div class="serv-name">Design de sobrancelha</div><div class="serv-duration">⏱ 40 min</div></div>
+                <div class="serv-price">R$ 80</div>
+            </div>
+            <div class="serv-item" onclick="toggleServ(this,'Henna de sobrancelha','50 min','60')">
+                <div class="serv-check"></div>
+                <div><div class="serv-name">Henna de sobrancelha</div><div class="serv-duration">⏱ 50 min</div></div>
+                <div class="serv-price">R$ 60</div>
+            </div>
+        </div>
+
+        <span class="s-label">Escolha a data e horário</span>
+        <div class="cal-header">
+            <button class="cal-nav" id="prevMonthBtn" onclick="changeMonth(-1)">‹</button>
+            <span class="cal-month" id="calMonth"></span>
+            <button class="cal-nav" onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="day-names">
+            <div class="day-name">D</div><div class="day-name">S</div><div class="day-name">T</div>
+            <div class="day-name">Q</div><div class="day-name">Q</div><div class="day-name">S</div><div class="day-name">S</div>
+        </div>
+        <div class="date-grid" id="dateGrid"></div>
+        <div class="time-grid" id="timeGrid"></div>
+
+        <div class="cart-bar" id="cartBar">
+            <div class="cart-bar-info">
+                <span class="cart-bar-count" id="cartCount">0 serviços</span>
+                <span class="cart-bar-total" id="cartTotal">R$ 0</span>
+            </div>
+            <button class="cart-bar-btn" onclick="confirmarHorario()">Revisar →</button>
+        </div>
+    </div>
+
+    <div class="screen" id="tela3">
+        <button class="back-btn" onclick="goTo(2)">Voltar</button>
+        <p class="screen-title">Revisão</p>
+        <p class="screen-sub">Confirme os detalhes antes de pagar</p>
+
+        <div class="review-card">
+            <div class="review-banner">
+                <div class="review-icon">💆‍♀️</div>
+                <div>
+                    <div class="review-service-name" id="r-servico">—</div>
+                    <div class="review-service-sub" id="r-duracao">—</div>
+                </div>
+            </div>
+            <div class="review-rows">
+                <div class="review-row"><span class="rr-label">Profissional</span><span class="rr-value" id="r-prof">—</span></div>
+                <div class="review-row"><span class="rr-label">Data e Hora</span><span class="rr-value" id="r-data">—</span></div>
+            </div>
+        </div>
+
+        <div class="subtotal-bar">
+            <span class="subtotal-label">Total a pagar</span>
+            <span class="subtotal-value" id="r-total">—</span>
+        </div>
+
+        <button class="btn-sb btn-sb-primary" onclick="goTo(4)">Confirmar e pagar →</button>
+    </div>
+
+    <div class="screen" id="tela4">
+        <button class="back-btn" onclick="goTo(3)">Voltar</button>
+        <p class="screen-title">Pagamento</p>
+      
+        <div class="pay-options">
+            <div class="pay-option selected" onclick="selPay(this,'local')">
+                <div class="pay-icon">🏪</div>
+                <div><div class="pay-name">Pagar no estúdio</div><div class="pay-desc">Dinheiro, débito ou crédito</div></div>
+                <div class="pay-radio"></div>
+            </div>
+        </div>
+
+        <button class="btn-sb btn-sb-primary" onclick="finalizarAgendamentoBackEnd()" id="btnPagar">Confirmar agendamento →</button>
+    </div>
+
+    <form id="formAgendamento" method="post" style="display:none;">
+        <input type="hidden" name="Profissional" id="hdnProfissional" />
+        <input type="hidden" name="Data" id="hdnData" />
+        <input type="hidden" name="Hora" id="hdnHora" />
+        <input type="hidden" name="ServicoResumo" id="hdnServico" />
+    </form>
+
+</div>
