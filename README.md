@@ -1,21 +1,28 @@
-# Projeto Integrado Multidisciplinar (PIM) - Sistema X
+# 💅 Studio Beauty - Sistema de Gestão Integrada
 
-Breve descrição do que o sistema faz. Ex: "Sistema Web desenvolvido em ASP.NET Core para gerenciamento de reservas de passagens de ônibus, como parte do Projeto Integrado Multidisciplinar da UNIP."
+O **Studio Beauty** é um sistema web focado na gestão e otimização dos processos de um estúdio de sobrancelhas e estética. Ele foi projetado para ser uma solução completa que engloba desde o controle de clientes e agendamentos até a organização administrativa do negócio.
+
+Este sistema foi desenvolvido como **Projeto Integrado Multidisciplinar (PIM)** do curso de Análise e Desenvolvimento de Sistemas (UNIP).
 
 ## 🚀 Tecnologias Utilizadas
+* **Backend:** C# / .NET 10.0 (ASP.NET Core Razor Pages)
+* **Banco de Dados:** Microsoft SQL Server
+* **Frontend:** HTML5, TailwindCSS, JavaScript (Interface Responsiva)
+* **Metodologia:** Desenvolvimento Ágil (Kanban e Sprints)
 
-* **Back-end:** C#, ASP.NET Core, Razor Pages
-* **Front-end:** HTML, JavaScript, TailwindCSS
-* **Banco de Dados:** Microsoft SQL Server Management Studio 22
+## 🎯 Principais Funcionalidades
+* Gestão e cadastro de clientes do estúdio.
+* Controle de serviços de estética e design de sobrancelhas.
+* Interface moderna, fluida e acessível.
+* Arquitetura em MVC/Razor Pages garantindo segurança e escalabilidade.
 
-## 📋 Pré-requisitos
+## 👥 Equipe de Desenvolvimento
+* Vinnicius Gabriel (Lead Developer)
+* Leonardo Robes
+* Inácio Bovo
+* Ricardo Oliveira
+* Gabriel Sant´Ana
+* José Mello Neto
 
-O que é necessário instalar para rodar o projeto:
-* [.NET SDK 10.0](https://dotnet.microsoft.com/download)
-* Visual Studio Insider 2026
-
-## 🔧 Como executar o projeto
-
-1. Clone este repositório:
-   ```bash
-   git clone [https://github.com/vinnisntos/PIM-CODE-ASP.NET-2026.git](https://github.com/vinnisntos/PIM-CODE-ASP.NET-2026.git)
+---
+*Projeto acadêmico - 2026*
