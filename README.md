@@ -4,18 +4,18 @@ Breve descrição do que o sistema faz. Ex: "Sistema Web desenvolvido em ASP.NET
 
 ## 🚀 Tecnologias Utilizadas
 
-* **Back-end:** C#, ASP.NET Core
-* **Front-end:** HTML, CSS, JavaScript (ou a lib que estiverem usando)
-* **Banco de Dados:** Supabase / PostgreSQL (ou o que estiverem usando)
+* **Back-end:** C#, ASP.NET Core, Razor Pages
+* **Front-end:** HTML, JavaScript, TailwindCSS
+* **Banco de Dados:** Microsoft SQL Server Management Studio 22
 
 ## 📋 Pré-requisitos
 
 O que é necessário instalar para rodar o projeto:
-* [.NET SDK 8.0](https://dotnet.microsoft.com/download) (ou a versão que estiver usando)
-* Visual Studio 2022 ou VS Code
+* [.NET SDK 10.0](https://dotnet.microsoft.com/download)
+* Visual Studio Insider 2026
 
 ## 🔧 Como executar o projeto
 
 1. Clone este repositório:
    ```bash
-   git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/vinnisntos/PIM-CODE-ASP.NET-2026.git)
+   git clone [https://github.com/vinnisntos/PIM-CODE-ASP.NET-2026.git](https://github.com/vinnisntos/PIM-CODE-ASP.NET-2026.git)
