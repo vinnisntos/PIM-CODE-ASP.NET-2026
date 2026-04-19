@@ -1,7 +1,7 @@
-﻿@page
-@model  PIM2026.Pages.IndexModel
+@page
+@model PIM2026.Pages.IndexModel
 @{
-    ViewData["Title"] = "Bem-vindo";
+    ViewData["Title"] = "Bem-vindo - Studio Beauty";
 }
 
 <div class="card-wrap">
@@ -10,13 +10,21 @@
         <p class="mt-1" style="font-size:13px;color:var(--muted)">Design de Sobrancelhas</p>
     </div>
 
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger" style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; font-weight: bold;">
+            @Model.ErrorMessage
+        </div>
+    }
+
     <div class="tabs" id="authTabs">
         <div class="tab active" onclick="switchTab('login')">Entrar</div>
         <div class="tab" onclick="switchTab('cadastro')">Cadastrar</div>
     </div>
 
     <div id="formLogin">
-        <form method="post">
+        <form method="post" action="/?handler=Login">
+            @Html.AntiForgeryToken()
             <div class="field">
                 <label>E-mail</label>
                 <input type="email" name="Email" placeholder="seu@email.com" required />
@@ -30,11 +38,57 @@
     </div>
 
     <div id="formCadastro" style="display:none">
-        <form method="post" asp-page-handler="Register">
-            <div class="field"><label>Nome</label><input type="text" name="Nome" required /></div>
-            <div class="field"><label>E-mail</label><input type="email" name="Email" required /></div>
-            <div class="field"><label>Senha</label><input type="password" name="Senha" required /></div>
+        <form method="post" action="/?handler=Register">
+            @Html.AntiForgeryToken()
+            <div class="field">
+                <label>Nome completo</label>
+                <input type="text" name="Nome" placeholder="Seu nome" required />
+            </div>
+            <div class="field">
+                <label>E-mail</label>
+                <input type="email" name="Email" placeholder="seu@email.com" required />
+            </div>
+            <div class="field">
+                <label>Telefone</label>
+                <input type="tel" name="Telefone" placeholder="(11) 99999-9999" required />
+            </div>
+            <div class="field">
+                <label>Senha</label>
+                <input type="password" name="Senha" placeholder="Mínimo 6 caracteres" required />
+            </div>
             <button type="submit" class="btn-sb btn-sb-primary">Criar conta grátis →</button>
         </form>
     </div>
+
+    <div class="mt-4 p-3 bg-light rounded" style="background:var(--rose-light)!important">
+        <div class="text-center small" style="color:var(--rose-dark)">
+            <strong>Acesso Profissional:</strong><br />
+            Email: admin@studiobeauty.com<br />
+            Senha: Admin@123
+        </div>
+    </div>
 </div>
+
+<script>
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+
+        if (tab === 'login') {
+            document.getElementById('formLogin').style.display = 'block';
+            document.getElementById('formCadastro').style.display = 'none';
+        } else {
+            document.getElementById('formLogin').style.display = 'none';
+            document.getElementById('formCadastro').style.display = 'block';
+        }
+    }
+
+    document.querySelector('input[name="Telefone"]')?.addEventListener('input', function(e) {
+        var valor = e.target.value.replace(/\D/g, '');
+        if (valor.length <= 10) {
+            e.target.value = valor.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        } else {
+            e.target.value = valor.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        }
+    });
+</script>

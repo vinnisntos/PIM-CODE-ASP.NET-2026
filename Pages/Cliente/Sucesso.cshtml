@@ -1,0 +1,96 @@
+@page
+@model PIM2026.Pages.Cliente.SucessoModel
+@{
+    ViewData["Title"] = "Agendamento Confirmado - Studio Beauty";
+}
+
+<div class="container-cliente py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow text-center">
+                <div class="card-body p-5">
+                    <div class="mb-4">
+                        <div class="success-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <h2 class="card-title text-success mb-3">Agendamento Confirmado! 🎉</h2>
+                    <p class="card-text text-muted mb-4">
+                        Seu agendamento foi realizado com sucesso. Guarde o código de confirmação abaixo:
+                    </p>
+
+                    <div class="codigo-confirmacao mb-4">
+                        <div class="text-muted small mb-1">Código de Confirmação</div>
+                        <div class="codigo-text">@Model.CodigoConfirmacao</div>
+                    </div>
+
+                    <div class="detalhes-agendamento mb-4">
+                        <div class="row">
+                            <div class="col-6 text-start">
+                                <div class="text-muted small">Serviço</div>
+                                <div class="fw-bold">@Model.NomeServico</div>
+                            </div>
+                            <div class="col-6 text-end">
+                                <div class="text-muted small">Data e Horário</div>
+                                <div class="fw-bold">@Model.DataHora.ToString("dd/MM/yyyy à\\s HH:mm")</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="/Cliente/Agendar" class="btn btn-primary">
+                            Voltar para Agendamentos
+                        </a>
+                        <a href="/Cliente/Historico" class="btn btn-outline-secondary">
+                            Ver Meu Histórico
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .success-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        background: linear-gradient(135deg, #4CAF50, #45a049);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .success-icon svg {
+        width: 40px;
+        height: 40px;
+    }
+
+    .codigo-confirmacao {
+        background: #f8f9fa;
+        border: 2px dashed #6c757d;
+        border-radius: 8px;
+        padding: 1rem;
+    }
+
+    .codigo-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #333;
+    }
+
+    .detalhes-agendamento {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 1rem;
+    }
+</style>

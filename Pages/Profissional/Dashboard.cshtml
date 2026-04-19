@@ -1,0 +1,228 @@
+@page
+@model PIM2026.Pages.Profissional.DashboardModel
+@{
+    ViewData["Title"] = "Painel do Profissional - Studio Beauty";
+}
+
+<div class="container-profissional py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">Painel Profissional</h2>
+            <small class="text-muted">Bem-vindo(a), @PIM2026.Services.AuthHelper.GetUsuarioNome(HttpContext)</small>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/Profissional/Servicos" class="btn btn-outline-primary">Gerenciar Serviços</a>
+            <a href="/Profissional/Relatorios" class="btn btn-outline-secondary">Relatórios</a>
+            <a href="/Logout" class="btn btn-outline-danger">Sair</a>
+        </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title mb-0">Atendimentos Hoje</h6>
+                            <h2 class="mb-0">@Model.AgendamentosHoje.Count</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title mb-0">Pendentes</h6>
+                            <h2 class="mb-0">@Model.AgendamentosPendentes.Count</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title mb-0">Total Clientes</h6>
+                            <h2 class="mb-0">@Model.TotalClientes</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title mb-0">Concluídos no Mês</h6>
+                            <h2 class="mb-0">@Model.AgendamentosMes</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                                <polyline points="17 6 23 6 23 12" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Agendamentos de Hoje -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Atendimentos de Hoje</h5>
+                    <span class="badge bg-light text-primary">@DateTime.Today.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.AgendamentosHoje.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Horário</th>
+                                        <th>Cliente</th>
+                                        <th>Serviço</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var agendamento in Model.AgendamentosHoje)
+                                    {
+                                        <tr>
+                                            <td>@agendamento.DataHora.ToString("HH:mm") - @agendamento.DataHoraFim.ToString("HH:mm")</td>
+                                            <td>@agendamento.Cliente.Nome</td>
+                                            <td>@agendamento.Servico.Nome</td>
+                                            <td>
+                                                <span class="badge bg-@(agendamento.Status == "Confirmado" ? "success" : "warning")">
+                                                    @agendamento.Status
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">Nenhum atendimento agendado para hoje.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Próximos Agendamentos -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Próximos 7 Dias</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.AgendamentosProximos.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var agendamento in Model.AgendamentosProximos)
+                            {
+                                <a href="/Profissional/Agendamento/@agendamento.Id"
+                                   class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@agendamento.Cliente.Nome</h6>
+                                        <small>@agendamento.DataHora.ToString("dd/MM")</small>
+                                    </div>
+                                    <p class="mb-1">@agendamento.Servico.Nome - @agendamento.DataHora.ToString("HH:mm")</p>
+                                    <small class="text-muted">@agendamento.Cliente.Telefone</small>
+                                </a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">Nenhum agendamento para os próximos dias.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agendamentos Pendentes -->
+    @if (Model.AgendamentosPendentes.Any())
+    {
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">Agendamentos Pendentes de Confirmação</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Cliente</th>
+                                <th>Serviço</th>
+                                <th>Contato</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var agendamento in Model.AgendamentosPendentes)
+                            {
+                                <tr>
+                                    <td>@agendamento.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@agendamento.Cliente.Nome</td>
+                                    <td>@agendamento.Servico.Nome</td>
+                                    <td>@agendamento.Cliente.Telefone</td>
+                                    <td>
+                                        <form method="post" asp-page-handler="Confirmar" asp-route-id="@agendamento.Id"
+                                              class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-success">Confirmar</button>
+                                        </form>
+                                        <form method="post" asp-page-handler="Cancelar" asp-route-id="@agendamento.Id"
+                                              class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-danger">Cancelar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

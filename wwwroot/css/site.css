@@ -364,3 +364,167 @@ html, body {
     color: var(--rose-dark);
     font-weight: 600;
 }
+
+/* Layouts para Cliente e Profissional */
+.container-cliente,
+.container-profissional {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.container-cliente {
+    background: var(--cream);
+    min-height: calc(100vh - 72px);
+}
+
+.container-profissional {
+    background: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* Cards específicos */
+.card {
+    border: none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.card-header {
+    border-radius: var(--radius) var(--radius) 0 0 !important;
+    font-weight: 600;
+}
+
+/* Grid de horários */
+.horarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.horarios-grid .form-check-label {
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.horarios-grid .form-check-input {
+    display: none;
+}
+
+/* Status badges personalizados */
+.badge-pendente { background-color: #ffc107; color: #000; }
+.badge-confirmado { background-color: #28a745; }
+.badge-cancelado { background-color: #6c757d; }
+.badge-concluido { background-color: #17a2b8; }
+
+/* Tabelas */
+.table th {
+    font-weight: 600;
+    color: var(--dark);
+    border-top: none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(196, 72, 110, 0.05);
+}
+
+/* Dashboard cards */
+.card.bg-primary { background: linear-gradient(135deg, var(--rose), var(--rose-dark)) !important; }
+.card.bg-success { background: linear-gradient(135deg, #28a745, #20c997) !important; }
+.card.bg-warning { background: linear-gradient(135deg, #ffc107, #ff9800) !important; }
+.card.bg-info { background: linear-gradient(135deg, #17a2b8, #138496) !important; }
+
+/* Alertas */
+.alert {
+    border: none;
+    border-radius: var(--radius);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .container-cliente,
+    .container-profissional {
+        padding: 10px;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .table-responsive {
+        font-size: 14px;
+    }
+}
+
+/* Animações de transição */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Botões customizados */
+.btn-primary {
+    background-color: var(--rose-dark);
+    border-color: var(--rose-dark);
+}
+
+.btn-primary:hover {
+    background-color: var(--rose-hover);
+    border-color: var(--rose-hover);
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+/* Color preview */
+.color-preview {
+    border: 2px solid #ddd;
+}
+
+/* Calendário visual */
+.calendario-mes {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.dia-calendario {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dia-calendario:hover:not(.desabilitado) {
+    background-color: var(--rose-light);
+}
+
+.dia-calendario.selecionado {
+    background-color: var(--rose-dark);
+    color: white;
+}
+
+.dia-calendario.desabilitado {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.dia-calendario.ocupado::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background-color: var(--gold);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 2px;
+}

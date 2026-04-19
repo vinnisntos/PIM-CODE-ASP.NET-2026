@@ -1,0 +1,137 @@
+@page
+@model PIM2026.Pages.Profissional.RelatoriosModel
+@{
+    ViewData["Title"] = "Relatórios - Studio Beauty";
+}
+
+<div class="container-profissional py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Relatórios</h2>
+        <a href="/Profissional/Dashboard" class="btn btn-outline-secondary">Voltar ao Dashboard</a>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Mês</label>
+                    <select class="form-select" asp-for="Mes">
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            <option value="@i">@System.Globalization.CultureInfo.GetCultureInfo("pt-BR").DateTimeFormat.GetMonthName(i)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Ano</label>
+                    <select class="form-select" asp-for="Ano">
+                        @for (int i = DateTime.Now.Year; i >= DateTime.Now.Year - 2; i--)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Receita do Mês</h5>
+                    <h2>R$ @Model.TotalReceitaMes.ToString("N2")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Atendimentos Realizados</h5>
+                    <h2>@Model.TotalAtendimentosMes</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Serviços Mais Agendados -->
+    @if (Model.ServicosMaisAgendados.Any())
+    {
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Serviços Mais Agendados</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Serviço</th>
+                                <th>Quantidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var servico in Model.ServicosMaisAgendados.OrderByDescending(s => s.Value))
+                            {
+                                <tr>
+                                    <td>@servico.Key</td>
+                                    <td>@servico.Value</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Lista de Agendamentos -->
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Agendamentos do Período</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.AgendamentosMes.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Cliente</th>
+                                <th>Serviço</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var agendamento in Model.AgendamentosMes)
+                            {
+                                <tr>
+                                    <td>@agendamento.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@agendamento.Cliente.Nome</td>
+                                    <td>@agendamento.Servico.Nome</td>
+                                    <td>R$ @agendamento.Servico.Preco.ToString("F2")</td>
+                                    <td>
+                                        <span class="badge bg-@(agendamento.Status == "Concluído" ? "success" : agendamento.Status == "Cancelado" ? "secondary" : "warning")">
+                                            @agendamento.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted text-center mb-0">Nenhum agendamento no período selecionado.</p>
+            }
+        </div>
+    </div>
+</div>

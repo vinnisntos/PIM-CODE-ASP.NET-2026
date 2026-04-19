@@ -1,0 +1,7 @@
+@page
+@model PIM2026.Pages.LogoutModel
+@using PIM2026.Services
+@{
+    AuthHelper.Logout(HttpContext);
+    Response.Redirect("/");
+}

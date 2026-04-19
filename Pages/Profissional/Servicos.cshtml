@@ -1,0 +1,167 @@
+@page
+@model PIM2026.Pages.Profissional.ServicosModel
+@{
+    ViewData["Title"] = "Gerenciar Serviços - Studio Beauty";
+}
+
+<div class="container-profissional py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Gerenciar Serviços</h2>
+        <a href="/Profissional/Dashboard" class="btn btn-outline-secondary">Voltar ao Dashboard</a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Novo Serviço</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="Adicionar">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label class="form-label">Nome</label>
+                            <input type="text" class="form-control" asp-for="NovoServico.Nome" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea class="form-control" asp-for="NovoServico.Descricao" rows="2"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Duração (min)</label>
+                                <input type="number" class="form-control" asp-for="NovoServico.DuracaoMinutos" min="1" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Preço (R$)</label>
+                                <input type="number" class="form-control" asp-for="NovoServico.Preco" step="0.01" min="0.01" required />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cor</label>
+                            <input type="color" class="form-control" asp-for="NovoServico.CorHex" value="#FF6B6B" />
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Adicionar Serviço</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Serviços Cadastrados</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Servicos.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Serviço</th>
+                                        <th>Duração</th>
+                                        <th>Preço</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var servico in Model.Servicos)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="color-preview me-2"
+                                                         style="width: 20px; height: 20px; border-radius: 4px; background-color: @servico.CorHex;"></div>
+                                                    <div>
+                                                        <strong>@servico.Nome</strong>
+                                                        <br />
+                                                        <small class="text-muted">@servico.Descricao</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>@servico.DuracaoMinutos min</td>
+                                            <td>R$ @servico.Preco.ToString("F2")</td>
+                                            <td>
+                                                <span class="badge bg-@(servico.IsActive ? "success" : "secondary")">
+                                                    @(servico.IsActive ? "Ativo" : "Inativo")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editarModal@servico.Id">Editar</button>
+                                                <form method="post" asp-page-handler="AtivarDesativar" asp-route-id="@servico.Id"
+                                                      class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm @(servico.IsActive ? "btn-outline-warning" : "btn-outline-success")">
+                                                        @(servico.IsActive ? "Desativar" : "Ativar")
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Modal Editar -->
+                                        <div class="modal fade" id="editarModal@servico.Id" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form method="post" asp-page-handler="Editar" asp-route-id="@servico.Id">
+                                                        @Html.AntiForgeryToken()
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Editar Serviço</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Nome</label>
+                                                                <input type="text" class="form-control" name="ServicoEdicao.Nome"
+                                                                       value="@servico.Nome" required />
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Descrição</label>
+                                                                <textarea class="form-control" name="ServicoEdicao.Descricao"
+                                                                          rows="2">@servico.Descricao</textarea>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label class="form-label">Duração (min)</label>
+                                                                    <input type="number" class="form-control"
+                                                                           name="ServicoEdicao.DuracaoMinutos"
+                                                                           value="@servico.DuracaoMinutos" min="1" required />
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label class="form-label">Preço (R$)</label>
+                                                                    <input type="number" class="form-control" name="ServicoEdicao.Preco"
+                                                                           value="@servico.Preco.ToString("F2")" step="0.01" min="0.01"
+                                                                           required />
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Cor</label>
+                                                                <input type="color" class="form-control" name="ServicoEdicao.CorHex"
+                                                                       value="@servico.CorHex" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">Nenhum serviço cadastrado.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

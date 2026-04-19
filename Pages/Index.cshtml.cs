@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PIM2026.Data;
 using PIM2026.Models;
+using PIM2026.Services;
 
 namespace PIM2026.Pages
 {
@@ -14,32 +15,45 @@ namespace PIM2026.Pages
             _context = context;
         }
 
+        public string ErrorMessage { get; set; } = string.Empty;
+
         public void OnGet()
         {
-            // Carrega a página inicial
         }
 
-        // Método acionado pelo botão de Entrar
-        public IActionResult OnPost(string Email, string Senha)
+        // Recebe os dados exatos do HTML (Email e Senha)
+        public IActionResult OnPostLogin(string Email, string Senha)
         {
-            var usuario = _context.Usuarios.FirstOrDefault(u => u.Email == Email && u.Senha == Senha);
+            // Busca o usuário no Supabase
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Email == Email && u.IsActive);
 
-            if (usuario != null)
+            // Verifica se achou e se a senha bate
+            if (usuario == null || !PasswordHasher.VerifyPassword(Senha, usuario.Senha))
             {
-                // Login deu certo. Mais pra frente vamos criar a sessão/cookie aqui.
-                return RedirectToPage("/Agendamento");
+                ErrorMessage = "E-mail ou senha inválidos. Tente novamente.";
+                return Page(); // Isso recarrega a página mostrando a caixa vermelha!
             }
 
-            ModelState.AddModelError(string.Empty, "E-mail ou senha inválidos.");
-            return Page();
+            // Salva na sessão
+            HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
+            HttpContext.Session.SetString("UsuarioNome", usuario.Nome);
+            HttpContext.Session.SetString("UsuarioPerfil", usuario.Perfil);
+
+            // Redireciona
+            if (usuario.Perfil == "Profissional")
+            {
+                return RedirectToPage("/Profissional/Dashboard");
+            }
+
+            return RedirectToPage("/Cliente/Agendar");
         }
 
-        // Método acionado pelo botão de Cadastrar
-        public IActionResult OnPostRegister(string Nome, string Email, string Senha)
+        // Recebe os dados exatos do HTML de Cadastro
+        public IActionResult OnPostRegister(string Nome, string Email, string Telefone, string Senha)
         {
             if (_context.Usuarios.Any(u => u.Email == Email))
             {
-                ModelState.AddModelError(string.Empty, "E-mail já cadastrado.");
+                ErrorMessage = "Este e-mail já está em uso.";
                 return Page();
             }
 
@@ -47,15 +61,19 @@ namespace PIM2026.Pages
             {
                 Nome = Nome,
                 Email = Email,
-                Senha = Senha, // Para o PIM, vamos deixar em texto puro por enquanto
+                Senha = PasswordHasher.HashPassword(Senha),
+                Telefone = Telefone,
                 Perfil = "Cliente"
             };
 
             _context.Usuarios.Add(novoUsuario);
             _context.SaveChanges();
 
-            // Cadastrou com sucesso, vai direto pro agendamento
-            return RedirectToPage("/Agendamento");
+            HttpContext.Session.SetInt32("UsuarioId", novoUsuario.Id);
+            HttpContext.Session.SetString("UsuarioNome", novoUsuario.Nome);
+            HttpContext.Session.SetString("UsuarioPerfil", novoUsuario.Perfil);
+
+            return RedirectToPage("/Cliente/Agendar");
         }
     }
 }

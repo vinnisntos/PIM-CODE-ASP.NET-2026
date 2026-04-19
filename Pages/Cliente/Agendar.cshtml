@@ -1,0 +1,165 @@
+@page
+@model PIM2026.Pages.Cliente.AgendarModel
+@{
+    ViewData["Title"] = "Agendar Horário - Studio Beauty";
+}
+
+<div class="container-cliente py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Olá, @PIM2026.Services.AuthHelper.GetUsuarioNome(HttpContext)!</h2>
+        <a href="/Logout" class="btn btn-outline-secondary btn-sm">Sair</a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.MensagemSucesso))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @Model.MensagemSucesso
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.MensagemErro))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @Model.MensagemErro
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Novo Agendamento</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="BuscarHorarios" id="formBuscar">
+                        @Html.AntiForgeryToken()
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Serviço</label>
+                                <select class="form-select" asp-for="ServicoId" required>
+                                    <option value="">Selecione um serviço</option>
+                                    @foreach (var servico in Model.Servicos)
+                                    {
+                                        <option value="@servico.Id">@servico.Nome - R$ @servico.Preco.ToString("F2")</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Data</label>
+                                <input type="date" class="form-control" asp-for="Data"
+                                       min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")"
+                                       max="@DateTime.Today.AddMonths(2).ToString("yyyy-MM-dd")" required />
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Buscar Horários Disponíveis</button>
+                        </div>
+                    </form>
+
+                    @if (Model.HorariosDisponiveis.Any())
+                    {
+                        <hr />
+                        <form method="post" asp-page-handler="Agendar">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" asp-for="ServicoId" />
+                            <input type="hidden" asp-for="Data" />
+
+                            <div class="mb-3">
+                                <label class="form-label">Selecione o Horário</label>
+                                <div class="horarios-grid">
+                                    @foreach (var horario in Model.HorariosDisponiveis)
+                                    {
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"
+                                                   name="HorarioSelecionado"
+                                                   value="@horario.ToString("yyyy-MM-ddTHH:mm")"
+                                                   id="hora_@horario.ToString("HHmm")" required />
+                                            <label class="form-check-label btn btn-outline-primary" for="hora_@horario.ToString("HHmm")">
+                                                @horario.ToString("HH:mm")
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Observações (opcional)</label>
+                                <textarea class="form-control" asp-for="Observacoes" rows="2"
+                                          placeholder="Alguma observação sobre o atendimento..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-lg">Confirmar Agendamento</button>
+                        </form>
+                    }
+                    else if (Model.ServicoId > 0)
+                    {
+                        <hr />
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i> Nenhum horário disponível para esta data.
+                            Por favor, selecione outra data.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Meus Agendamentos</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.MeusAgendamentos.Any())
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var agendamento in Model.MeusAgendamentos)
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@agendamento.Servico.Nome</h6>
+                                        <span class="badge bg-@(agendamento.Status == "Confirmado" ? "success" :
+                                                              agendamento.Status == "Pendente" ? "warning" : "secondary")">
+                                            @agendamento.Status
+                                        </span>
+                                    </div>
+                                    <p class="mb-1">
+                                        <i class="bi bi-calendar"></i> @agendamento.DataHora.ToString("dd/MM/yyyy")
+                                        <br />
+                                        <i class="bi bi-clock"></i> @agendamento.DataHora.ToString("HH:mm")
+                                    </p>
+                                    <small class="text-muted">Código: @agendamento.CodigoConfirmacao</small>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center mb-0">Você não tem agendamentos futuros.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const radios = document.querySelectorAll('input[type="radio"][name="HorarioSelecionado"]');
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.querySelectorAll('.form-check-label').forEach(label => {
+                        label.classList.remove('btn-primary');
+                        label.classList.add('btn-outline-primary');
+                    });
+                    if (this.checked) {
+                        this.nextElementSibling.classList.remove('btn-outline-primary');
+                        this.nextElementSibling.classList.add('btn-primary');
+                    }
+                });
+            });
+        });
+    </script>
+}
